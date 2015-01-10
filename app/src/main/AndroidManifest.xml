@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.josh.lists" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".ArtistList.ArtistListActivity"
+            android:label="Artists" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".AlbumList.AlbumListActivity"
+            android:label="Albums"
+            android:parentActivityName=".ArtistList.ArtistListActivity" >
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ArtistList.ArtistListActivity"/>
+        </activity>
+        <activity
+            android:name=".TrackList.TrackListActivity"
+            android:label="Songs"
+            android:parentActivityName=".AlbumList.AlbumListActivity" >
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".AlbumList.AlbumListActivity" />
+        </activity>
+    </application>
+
+</manifest>
