@@ -5,5 +5,6 @@ package com.andrumio.josh.mpd;
  */
 public interface ITrack {
 
-    String GetName();
+    String getTitle();
+    String getAlbumName();
 }

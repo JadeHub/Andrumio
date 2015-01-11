@@ -21,6 +21,8 @@ public interface IClient {
     List<IArtist> getArtistList();
     List<IAlbum> getAlbumList(String artist);
     List<ITrack> getTrackList(String album);
+
+    List<ITrack> getArtistTrackList(String artist);
 }
 
 
