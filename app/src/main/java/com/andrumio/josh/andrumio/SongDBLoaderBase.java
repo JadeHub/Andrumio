@@ -3,6 +3,7 @@ package com.andrumio.josh.andrumio;
 import android.content.AsyncTaskLoader;
 import android.content.Context;
 
+import com.andrumio.josh.andrumio.AsycLoader.AsyncLoaderResult;
 import com.andrumio.josh.mpd.IClient;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.andrumio.josh.andrumio;
+package com.andrumio.josh.andrumio.AsycLoader;
 
 import android.app.LoaderManager;
 import android.content.Context;
@@ -18,8 +18,7 @@ public class AsyncLoader<T> implements LoaderManager.LoaderCallbacks<AsyncLoader
     private final AsyncLoaderCallback<T> _callback;
     private final Context _context;
 
-
-    public AsyncLoader(Context context, AsyncLoaderLoad<T> loader, AsyncLoaderCallback callback)
+    public AsyncLoader(Context context, AsyncLoaderLoad<T> loader, AsyncLoaderCallback<T> callback)
     {
         _context = context;
         _loader = loader;
@@ -33,7 +32,7 @@ public class AsyncLoader<T> implements LoaderManager.LoaderCallbacks<AsyncLoader
 
     @Override
     public Loader<AsyncLoaderResult<T>> onCreateLoader(int id, Bundle args) {
-        return new LoaderImpl<T>(_context, _loader);
+        return new AsyncLoaderImpl<T>(_context, _loader);
     }
 
     @Override

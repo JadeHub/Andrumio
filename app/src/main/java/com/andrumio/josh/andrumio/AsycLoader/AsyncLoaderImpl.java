@@ -1,4 +1,4 @@
-package com.andrumio.josh.andrumio;
+package com.andrumio.josh.andrumio.AsycLoader;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
@@ -6,11 +6,11 @@ import android.content.Context;
 /**
  * Created by Josh on 15/01/2015.
  */
-public class LoaderImpl<T> extends AsyncTaskLoader<AsyncLoaderResult<T>> {
+public class AsyncLoaderImpl<T> extends AsyncTaskLoader<AsyncLoaderResult<T>> {
     private T _data;
     private final AsyncLoaderLoad<T> _loader;
 
-    public LoaderImpl(Context context, AsyncLoaderLoad<T> loader) {
+    public AsyncLoaderImpl(Context context, AsyncLoaderLoad<T> loader) {
         super(context);
         _loader = loader;
     }

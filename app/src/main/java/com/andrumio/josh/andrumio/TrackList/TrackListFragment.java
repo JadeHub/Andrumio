@@ -1,8 +1,6 @@
 package com.andrumio.josh.andrumio.TrackList;
 
 
-import android.app.LoaderManager;
-import android.content.Loader;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,11 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 
 import com.andrumio.josh.andrumio.App;
-import com.andrumio.josh.andrumio.AsyncLoader;
-import com.andrumio.josh.andrumio.AsyncLoaderCallback;
-import com.andrumio.josh.andrumio.AsyncLoaderLoad;
+import com.andrumio.josh.andrumio.AsycLoader.AsyncLoader;
+import com.andrumio.josh.andrumio.AsycLoader.AsyncLoaderCallback;
+import com.andrumio.josh.andrumio.AsycLoader.AsyncLoaderLoad;
 import com.andrumio.josh.andrumio.R;
-import com.andrumio.josh.mpd.IArtist;
 import com.andrumio.josh.mpd.ITrack;
 
 import java.util.ArrayList;

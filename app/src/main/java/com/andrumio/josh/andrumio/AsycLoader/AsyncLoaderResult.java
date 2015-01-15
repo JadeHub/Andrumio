@@ -1,4 +1,4 @@
-package com.andrumio.josh.andrumio;
+package com.andrumio.josh.andrumio.AsycLoader;
 
 import android.content.AsyncTaskLoader;
 
