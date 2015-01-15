@@ -38,7 +38,6 @@ public class ClientSocket {
     {
         _callback = callback;
         _socket = new Socket();
-
     }
 
     public void beginConnect(String host, int port)
@@ -50,7 +49,8 @@ public class ClientSocket {
     public void disconnect()
     {
         try {
-            _socket.close();
+            if(_socket.isConnected())
+                _socket.close();
         }
         catch(Exception e)
         {
@@ -70,6 +70,7 @@ public class ClientSocket {
         }
         catch(IOException e)
         {
+            disconnect();
             _callback.onReadError(e.getMessage());
         }
         return "";
@@ -100,8 +101,10 @@ public class ClientSocket {
         {
             try
             {
+                _socketReader = null;
+                _socketWriter = null;
+
                 InetAddress address = InetAddress.getByName(_host);
-                _socket = new Socket();
                 _socket.connect(new InetSocketAddress(address, _port));
                 _socketReader = new BufferedReader(new InputStreamReader(_socket.getInputStream()));
                 _socketWriter = new PrintWriter(_socket.getOutputStream(), true);

@@ -1,0 +1,50 @@
+file: USB/Music/Pearl Jam/Yield/11 In Hiding.mp3
+Last-Modified: 2003-11-16T14:16:10Z
+Time: 300
+Artist: Pearl Jam
+Title: In Hiding
+Album: Yield
+Track: 11/13
+Date: 1998
+Genre: Rock
+Composer: Eddie Vedder, Stone Gossard
+
+
+file ic/ALBUMS/Berri/Sunshine After The Rain (Single)/04 - Sunshine After The Rain - (Dancin' Divaz Rhythm Mix).mp3
+Last-Modified: 2009-12-29T04:30:54Z
+Time: 391
+Artist: Berri
+AlbumArtist: Berri
+Title: Sunshine After The Rain - (Dancin' Divaz Rhythm Mix)
+Album: Sunshine After The Rain
+Track: 4
+Date: 1995
+Genre: Electronica
+
+
+
+
+
+
+                                                                file: USB/Music/Pearl Jam/Yield/12 Push Me, Pull Me.mp3
+                                       Last-Modified: 2003-11-16T14:16:24Z
+                                                                          Time: 148
+   Artist: Pearl Jam
+                    Title: Push Me, Pull Me
+                                           Album: Yield
+                                                       Track: 12/13
+                                                                   Date: 1998
+                                                                             Genre: Rock
+        Composer: Eddie Vedder, Jeff Ament
+
+
+                                          file: USB/Music/Pearl Jam/Yield/13 All Those Yesterdays.mp3
+                     Last-Modified: 2003-11-16T14:17:16Z
+                                                        Time: 465
+                                                                 Artist: Pearl Jam
+  Title: All Those Yesterdays
+                             Album: Yield
+                                         Track: 13/13
+                                                     Date: 1998
+                                                               Genre: Rock
+                                                                          Composer: Stone Gossard

@@ -3,38 +3,46 @@ package com.andrumio.josh.andrumio;
 import android.content.AsyncTaskLoader;
 import android.content.Context;
 
-import com.andrumio.josh.mpd.Client;
+import com.andrumio.josh.mpd.IClient;
 
 import java.util.List;
 
 /**
  * Created by Josh on 10/01/2015.
  */
-abstract public class SongDBLoaderBase<EntityType> extends AsyncTaskLoader<List<EntityType>> {
 
-    protected Client _client;
+abstract public class SongDBLoaderBase<EntityType> extends AsyncTaskLoader<AsyncLoaderResult<List<EntityType>>> {
+
+    protected IClient _client;
     private List<EntityType> _data;
 
-    public SongDBLoaderBase(Context context, Client client) {
+    public SongDBLoaderBase(Context context) {
         super(context);
-        _client = client;
+        _client = App.GetApp(context).getClient();
     }
 
     abstract protected List<EntityType> load();
 
     @Override
-    public List<EntityType> loadInBackground()
+    public AsyncLoaderResult<List<EntityType>> loadInBackground()
     {
-        if(_data == null)
-            _data = load();
-        return _data;
+        try
+        {
+            if(_data == null)
+                _data = load();
+            return new AsyncLoaderResult<List<EntityType>>(_data);
+        }
+        catch(Exception e)
+        {
+            return new AsyncLoaderResult<List<EntityType>>(e);
+        }
     }
 
     @Override
     protected void onStartLoading()
     {
         if(_data != null) {
-            deliverResult(_data);
+            deliverResult(new AsyncLoaderResult<List<EntityType>>(_data));
         }
         if(takeContentChanged() || _data == null){
             forceLoad();

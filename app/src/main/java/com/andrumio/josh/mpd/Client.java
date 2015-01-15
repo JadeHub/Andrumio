@@ -16,41 +16,58 @@ import android.util.Log;
  */
 public class Client implements IClient, ClientSocket.Callback {
 
-    private final int ARTIST_LIST_REQUEST = 1;
-
+    private final String _name;
     private final String _host;
     private final int _port;
     private Callback _callback;
 
     private ClientSocket _socket;
 
-    public Client(String host, int port)
+    public Client(String name, String host, int port)
     {
+        _name = name;
         _socket = new ClientSocket(this);
         _host = host;
         _port = port;
     }
 
-    public void setCallback(Callback c)
-    {
+    @Override
+    public void connect(Callback c) {
         _callback = c;
-    }
-    public void connect()
-    {
         _socket.beginConnect(_host, _port);
     }
+
+    @Override
+    public String getName(){
+        return _name;
+    }
+
+    @Override
+    public String getHostName(){
+        return _host;
+    }
+
+    @Override
+    public int getPort(){
+        return _port;
+    }
+
+    @Override
     public void disconnect()
     {
         _socket.disconnect();
     }
+
+    @Override
     public boolean isConnected()
     {
         return _socket.isConnected();
     }
 
-    private boolean IsErrorResult(String line)
+
+    private static boolean IsErrorResult(String line)
     {
-        return line.startsWith("ACK");
+        return line.startsWith("ACK") || line.length() == 0;
     }
 
     private static String ParseTag(String tag, String line)

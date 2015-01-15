@@ -1,9 +1,6 @@
 package com.andrumio.josh.andrumio.ArtistList;
 
-import android.app.Fragment;
-import android.app.LoaderManager;
 import android.content.Intent;
-import android.content.Loader;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -12,10 +9,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ExpandableListView;
 
+import com.andrumio.josh.andrumio.App;
+import com.andrumio.josh.andrumio.AsyncLoader;
+import com.andrumio.josh.andrumio.AsyncLoaderCallback;
+import com.andrumio.josh.andrumio.AsyncLoaderLoad;
 import com.andrumio.josh.andrumio.R;
 import com.andrumio.josh.andrumio.TrackList.TrackListActivity;
-import com.andrumio.josh.mpd.Client;
 import com.andrumio.josh.mpd.IArtist;
+import com.andrumio.josh.mpd.IClient;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,39 +25,43 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
-public class ArtistListActivity extends ActionBarActivity implements LoaderManager.LoaderCallbacks<List<IArtist>>, ExpandableListView.OnChildClickListener {
+public class ArtistListActivity extends ActionBarActivity implements ExpandableListView.OnChildClickListener {
 
     private ArtistListAdapter _listAdapter;
-    public static Client _client;
+    private AsyncLoader<List<IArtist>> _loader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_artist_list);
 
-        if (_client == null) {
-            _client = new Client("192.168.0.11", 6600);
-            _client.setCallback(new Client.Callback() {
-                @Override
-                public void onConnected() {
-                    try {
-                        getLoaderManager().initLoader(0, null, ArtistListActivity.this);
-                    } catch (Exception e) {
+        IClient client = App.GetApp(this).getClient();
 
-                        Log.e("", e.getMessage());
+        _loader = new AsyncLoader<List<IArtist>>(this,
+                new AsyncLoaderLoad() {
+                    @Override
+                    public List<IArtist> Load() {
+                        return App.GetApp(ArtistListActivity.this).getClient().getArtistList();
                     }
-                }
-            });
-            _client.connect();
-        }
-        else if(_client.isConnected())
-        {
-            getLoaderManager().initLoader(0, null, this);
-        }
+                },
+                new AsyncLoaderCallback<List<IArtist>>() {
+                    @Override
+                    public void onLoaded(List<IArtist> result) {
+                        onDataLoaded(result);
+                    }
+
+                    @Override
+                    public void onLoadFailed(Exception e) {
+
+                    }
+                });
+
+        _loader.initLoader(getLoaderManager());
 
         final ExpandableListView listview = (ExpandableListView) findViewById(R.id.artist_listview);
         listview.setOnChildClickListener(this);
     }
+
 
     @Override
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
@@ -97,13 +102,8 @@ public class ArtistListActivity extends ActionBarActivity implements LoaderManag
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public Loader<List<IArtist>> onCreateLoader(int id, Bundle args) {
-        return new ArtistAsyncLoader(this, _client);
-    }
+    public void onDataLoaded(List<IArtist> data) {
 
-    @Override
-    public void onLoadFinished(Loader<List<IArtist>> loader, List<IArtist> data) {
         HashSet<Character> chars = new HashSet<>();
 
         HashMap<Character, List<String>> letterToArtist = new HashMap<>();
@@ -133,11 +133,6 @@ public class ArtistListActivity extends ActionBarActivity implements LoaderManag
 
         _listAdapter = new ArtistListAdapter(this, charList, letterToArtist);
         listview.setAdapter(_listAdapter);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<IArtist>> loader) {
-
     }
 
     @Override

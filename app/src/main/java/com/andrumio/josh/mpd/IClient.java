@@ -14,9 +14,13 @@ public interface IClient {
         public void onDisconnected() {}
     }
 
-    void connect();
+    void connect(Callback c);
     void disconnect();
     boolean isConnected();
+
+    String getName();
+    String getHostName();
+    int getPort();
 
     List<IArtist> getArtistList();
     List<IAlbum> getAlbumList(String artist);
