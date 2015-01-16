@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.andrumio.josh.andrumio.R;
@@ -56,8 +57,14 @@ public class ArtistListAdapter extends BaseExpandableListAdapter {
 
         TextView txtListChild = (TextView) convertView
                 .findViewById(R.id.lblListItem);
-
         txtListChild.setText(childText);
+
+        float f = txtListChild.getTextSize();
+
+
+        ImageView imgView = (ImageView)convertView.findViewById(R.id.imgView1);
+        imgView.setImageResource(R.drawable.album);
+
         return convertView;
     }
 
@@ -94,8 +101,13 @@ public class ArtistListAdapter extends BaseExpandableListAdapter {
 
         TextView lblListHeader = (TextView) convertView
                 .findViewById(R.id.lblListHeader);
+
+        float f = lblListHeader.getTextSize();
+
         lblListHeader.setTypeface(null, Typeface.BOLD);
         lblListHeader.setText(headerTitle.toString());
+
+
 
         return convertView;
     }
