@@ -12,5 +12,7 @@
     <string name="status">Status</string>
     <string name="settings">Settings</string>
     <string name="artists">Artists</string>
+    <string name="playlist">Playlist</string>
+    <string name="title_activity_playlist">PlaylistActivity</string>
 
 </resources>

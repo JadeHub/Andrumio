@@ -1,33 +1,31 @@
-package com.andrumio.josh.andrumio.ArtistList;
+package com.andrumio.josh.andrumio.Playlist;
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.andrumio.josh.andrumio.R;
 
-public class ArtistListActivity extends ActionBarActivity {
+
+public class PlaylistActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_artist_list);
+        setContentView(R.layout.activity_playlist);
 
         if (savedInstanceState == null) {
-            android.app.Fragment f = new ArtistListFragment();
+            android.app.Fragment f = new PlaylistFragment();
             getFragmentManager().beginTransaction().add(android.R.id.content, f).commit();
         }
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_artist_list, menu);
+        getMenuInflater().inflate(R.menu.menu_playlist, menu);
         return true;
     }
 
@@ -46,4 +44,3 @@ public class ArtistListActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 }
-

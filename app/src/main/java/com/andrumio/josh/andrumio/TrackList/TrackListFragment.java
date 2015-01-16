@@ -37,9 +37,9 @@ public class TrackListFragment extends Fragment implements ExpandableListView.On
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View v  = inflater.inflate(R.layout.fragment_track_list, container, false);
-        View b = getView();
-        ((ExpandableListView) v.findViewById(R.id.track_listview1)).setOnChildClickListener(this);
+        View view  = inflater.inflate(R.layout.fragment_track_list, container, false);
+        ((ExpandableListView) view.findViewById(R.id.track_listview)).setOnChildClickListener(this);
+        ((ExpandableListView) view.findViewById(R.id.track_listview)).setVisibility(View.GONE);
 
         _loader = new AsyncLoader<List<ITrack>>(getActivity(),
                 new AsyncLoaderLoad() {
@@ -63,7 +63,7 @@ public class TrackListFragment extends Fragment implements ExpandableListView.On
 
 
         _loader.initLoader(getLoaderManager());
-        return v;
+        return view;
     }
 
     @Override
@@ -72,6 +72,10 @@ public class TrackListFragment extends Fragment implements ExpandableListView.On
     }
 
     public void onDataLoaded(List<ITrack> data) {
+
+        getView().findViewById(R.id.track_listview).setVisibility(View.VISIBLE);
+        getView().findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+
         HashSet<String> albums = new HashSet<>();
 
         HashMap<String, List<ITrack>> albumToSongList = new HashMap<>();
@@ -88,7 +92,7 @@ public class TrackListFragment extends Fragment implements ExpandableListView.On
             }
         }
 
-        final ExpandableListView listview = (ExpandableListView) getView().findViewById(R.id.track_listview1);
+        final ExpandableListView listview = (ExpandableListView) getView().findViewById(R.id.track_listview);
 
         ArrayList<String> albumList = new ArrayList<String>(albums);
         Collections.sort(albumList, new Comparator<String>() {

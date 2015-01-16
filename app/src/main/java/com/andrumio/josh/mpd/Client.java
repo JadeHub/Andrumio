@@ -102,7 +102,22 @@ public class Client implements IClient, ClientSocket.Callback {
         {
             String line = _socket.Recv();
             if(IsErrorResult(line)) return null;
-            if(line.startsWith("OK") || line.isEmpty()) break;
+            if(line.startsWith("OK") || line.isEmpty())
+            {
+                //Store the current values
+                if(!currentTrackTags.isEmpty())
+                {
+                    if( currentTrackTags.containsKey("Title")) {
+                        ITrack track = new Track(currentTrackTags);
+                        results.add(track);
+                    }
+                    else {
+
+                        Log.w("MPD", "Discarding track missing Title tag. " + currentTrackTags.get("file"));
+                    }
+                }
+                break;
+            }
 
             if(isTag(line, "file"))
             {
@@ -116,7 +131,8 @@ public class Client implements IClient, ClientSocket.Callback {
                         results.add(track);
                     }
                     else {
-                        Log.w("MPD", "Discarding track missing Title tag.");
+
+                        Log.w("MPD", "Discarding track missing Title tag. " + currentTrackTags.get("file"));
                     }
                 }
                 //reset for next track
@@ -136,14 +152,49 @@ public class Client implements IClient, ClientSocket.Callback {
         return results;
     }
 
+    private TagSet recvTagSet()
+    {
+        HashMap<String, String> tags = new HashMap<>();
+        while(true) {
+            String line = _socket.Recv();
+            if (IsErrorResult(line)) return null;
+            if (line.startsWith("OK") || line.isEmpty()) {
+                break;
+            }
+            String tagName = parseTagName(line);
+            if(!tagName.isEmpty())
+            {
+                String value = ParseTag(tagName, line);
+                if(!value.isEmpty())
+                {
+                    tags.put(tagName, value);
+                }
+            }
+        }
+        return new TagSet(tags);
+    }
+
+    @Override
+    public TagSet getStatus()
+    {
+        _socket.Send("status");
+        return recvTagSet();
+    }
+
+    @Override
+    public List<ITrack> getCurrentPlayList()
+    {
+        _socket.Send("playlistinfo");
+        return receiveTrackList();
+    }
+
     @Override
     public List<ITrack> getArtistTrackList(String artist)
     {
         _socket.Send("find artist \"" + artist + "\"");
-
         return receiveTrackList();
     }
-
+/*
     @Override
     public List<ITrack> getTrackList(String album)
     {
@@ -164,7 +215,7 @@ public class Client implements IClient, ClientSocket.Callback {
         }
         return results;
     }
-
+*/
     @Override
     public List<IArtist> getArtistList()
     {

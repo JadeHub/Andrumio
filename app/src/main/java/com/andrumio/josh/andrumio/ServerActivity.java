@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.andrumio.josh.andrumio.ArtistList.ArtistListActivity;
+import com.andrumio.josh.andrumio.Playlist.PlaylistActivity;
 import com.andrumio.josh.mpd.Client;
 import com.andrumio.josh.mpd.IClient;
 
@@ -18,6 +19,7 @@ public class ServerActivity extends ActionBarActivity {
 
     private IClient _client;
 
+    private Button _btnPlaylist;
     private Button _btnArtistList;
     private Button _btnFileList;
     private Button _btnStatus;
@@ -30,10 +32,24 @@ public class ServerActivity extends ActionBarActivity {
 
         _client = App.GetApp(this).getClient();
 
+        _btnPlaylist = (Button)findViewById(R.id.btnPlaylist);
         _btnArtistList = (Button)findViewById(R.id.btnArtistList);
         _btnFileList = (Button)findViewById(R.id.btnFileList);
         _btnStatus = (Button)findViewById(R.id.btnStatus);
         _btnSettings = (Button)findViewById(R.id.btnSettings);
+
+        _btnPlaylist.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(ServerActivity.this, PlaylistActivity.class);
+                try {
+                    startActivity(intent);
+                }
+                catch(Exception e)
+                {
+                    Log.e("", e.getMessage());
+                }
+            }
+        });
 
         _btnArtistList.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -89,6 +105,7 @@ public class ServerActivity extends ActionBarActivity {
     private void enableButtons()
     {
         boolean enable = _client.isConnected();
+        _btnPlaylist.setEnabled(enable);
         _btnArtistList.setEnabled(enable);
         _btnFileList.setEnabled(enable);
         _btnStatus.setEnabled(enable);

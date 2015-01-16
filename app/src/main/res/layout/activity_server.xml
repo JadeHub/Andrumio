@@ -15,9 +15,10 @@
         android:layout_height="wrap_content"
         android:text="@string/browse_artists"
         android:id="@+id/btnArtistList"
+        android:layout_marginTop="124dp"
         android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="94dp" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:layout_width="match_parent"
@@ -46,5 +47,14 @@
         android:layout_below="@+id/btnStatus"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/playlist"
+        android:id="@+id/btnPlaylist"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="39dp" />
 
 </RelativeLayout>

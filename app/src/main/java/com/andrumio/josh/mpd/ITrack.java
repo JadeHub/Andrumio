@@ -6,5 +6,9 @@ package com.andrumio.josh.mpd;
 public interface ITrack {
 
     String getTitle();
+    String getFileName();
     String getAlbumName();
+
+    boolean hasTag(String tag);
+    String getTag(String tag);
 }

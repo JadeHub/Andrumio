@@ -1,10 +1,11 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.andrumio.josh.andrumio.TrackList.TrackListFragment">
+    android:id="@+id/artist_fragment"
+    tools:context="com.andrumio.josh.andrumio.ArtistList.ArtistListFragment">
 
     <ExpandableListView
-        android:id="@+id/track_listview"
+        android:id="@+id/artist_listview1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"/>
