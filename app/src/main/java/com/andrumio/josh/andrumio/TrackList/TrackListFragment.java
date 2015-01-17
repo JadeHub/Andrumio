@@ -46,7 +46,7 @@ public class TrackListFragment extends Fragment implements ExpandableListView.On
                     @Override
                     public List<ITrack> Load() {
                         String artist = getArguments().getString("Artist");
-                        return App.GetApp(getActivity()).getClient().getArtistTrackList(artist);
+                        return App.GetApp(getActivity()).getServer().getClient().getArtistTrackList(artist);
                     }
                 },
                 new AsyncLoaderCallback<List<ITrack>>() {

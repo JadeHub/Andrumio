@@ -7,11 +7,11 @@ import java.util.List;
  */
 public interface IClient {
 
-    public abstract class Callback
+    public interface Callback
     {
-        public void onConnectionError(String message) {}
-        public void onConnected() {}
-        public void onDisconnected() {}
+        void onConnectionError(String message);
+        void onConnected();
+        void onDisconnected();
     }
 
     void connect(Callback c);
@@ -23,13 +23,16 @@ public interface IClient {
     int getPort();
 
     List<IArtist> getArtistList();
-    List<IAlbum> getAlbumList(String artist);
 
     List<ITrack> getArtistTrackList(String artist);
 
     List<ITrack> getCurrentPlayList();
 
     TagSet getStatus();
+
+    List<String> idle();
+
+    void endIdle();
 }
 
 

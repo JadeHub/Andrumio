@@ -1,10 +1,5 @@
 package com.andrumio.josh.mpd;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -70,7 +65,7 @@ public class Client implements IClient, ClientSocket.Callback {
         return line.startsWith("ACK") || line.length() == 0;
     }
 
-    private static String ParseTag(String tag, String line)
+    private static String parseTag(String line, String tag)
     {
         if(line.startsWith(tag + ": "))
         {
@@ -107,7 +102,7 @@ public class Client implements IClient, ClientSocket.Callback {
                 //Store the current values
                 if(!currentTrackTags.isEmpty())
                 {
-                    if( currentTrackTags.containsKey("Title")) {
+                    if( currentTrackTags.containsKey(TagNames.TITLE)) {
                         ITrack track = new Track(currentTrackTags);
                         results.add(track);
                     }
@@ -126,7 +121,7 @@ public class Client implements IClient, ClientSocket.Callback {
                 //Store the current values
                 if(!currentTrackTags.isEmpty())
                 {
-                    if( currentTrackTags.containsKey("Title")) {
+                    if( currentTrackTags.containsKey(TagNames.TITLE)) {
                         ITrack track = new Track(currentTrackTags);
                         results.add(track);
                     }
@@ -142,7 +137,7 @@ public class Client implements IClient, ClientSocket.Callback {
             String tagName = parseTagName(line);
             if(!tagName.isEmpty())
             {
-                String value = ParseTag(tagName, line);
+                String value = parseTag(line, tagName);
                 if(!value.isEmpty())
                 {
                     currentTrackTags.put(tagName, value);
@@ -164,7 +159,7 @@ public class Client implements IClient, ClientSocket.Callback {
             String tagName = parseTagName(line);
             if(!tagName.isEmpty())
             {
-                String value = ParseTag(tagName, line);
+                String value = parseTag(line, tagName);
                 if(!value.isEmpty())
                 {
                     tags.put(tagName, value);
@@ -177,6 +172,8 @@ public class Client implements IClient, ClientSocket.Callback {
     @Override
     public TagSet getStatus()
     {
+        if(!_socket.isConnected())
+            _socket.blockingConnect(_host, _port);
         _socket.Send("status");
         return recvTagSet();
     }
@@ -184,6 +181,8 @@ public class Client implements IClient, ClientSocket.Callback {
     @Override
     public List<ITrack> getCurrentPlayList()
     {
+        if(!_socket.isConnected())
+            _socket.blockingConnect(_host, _port);
         _socket.Send("playlistinfo");
         return receiveTrackList();
     }
@@ -191,34 +190,39 @@ public class Client implements IClient, ClientSocket.Callback {
     @Override
     public List<ITrack> getArtistTrackList(String artist)
     {
+        if(!_socket.isConnected())
+            _socket.blockingConnect(_host, _port);
         _socket.Send("find artist \"" + artist + "\"");
         return receiveTrackList();
     }
-/*
+
     @Override
-    public List<ITrack> getTrackList(String album)
-    {
-        _socket.Send("find album \"" + album + "\"");
-
-        ArrayList<ITrack> results = new ArrayList<>();
-
-        while(true)
-        {
-            String line = _socket.Recv();
-            if(IsErrorResult(line)) return null;
-            if(line.startsWith("OK") || line.isEmpty()) break;
-            String tag = ParseTag("file", line);
-            if(!tag.isEmpty())
-            {
-                results.add(new Track(tag));
-            }
-        }
-        return results;
+    public void endIdle() {
+        _socket.Send("noidle");
     }
-*/
+
+    @Override
+    public List<String> idle() {
+        _socket.Send("idle");
+
+        List<String> result = new ArrayList<>();
+
+        while(true) {
+            String line = _socket.Recv();
+            if (IsErrorResult(line)) return null;
+            if (line.startsWith("OK") || line.isEmpty()) break;
+            if(isTag(line, TagNames.CHANGED))
+                result.add(parseTag(line, TagNames.CHANGED));
+        }
+        return result;
+    }
+
+
     @Override
     public List<IArtist> getArtistList()
     {
+        if(!_socket.isConnected())
+            _socket.blockingConnect(_host, _port);
         _socket.Send("list artist");
 
         ArrayList<IArtist> results = new ArrayList<>();
@@ -228,44 +232,10 @@ public class Client implements IClient, ClientSocket.Callback {
             String line = _socket.Recv();
             if(IsErrorResult(line)) return null;
             if(line.startsWith("OK") || line.isEmpty()) break;
-            String tag = ParseTag("Artist", line);
+            String tag = parseTag(line, TagNames.ARTIST);
             if(!tag.isEmpty())
             {
                 results.add(new Artist(tag));
-            }
-        }
-        return results;
-    }
-
-    @Override
-    public List<IAlbum> getAlbumList(String artist)
-    {
-        _socket.Send("list album artist \"" + artist + "\"");
-
-        ArrayList<IAlbum> results = new ArrayList<>();
-        while(true)
-        {
-            String line = _socket.Recv();
-
-            if(IsErrorResult(line))
-            {
-                return null;
-            }
-
-            if(line.startsWith("OK") || line.isEmpty())
-            {
-                break;
-            }
-            String tag = ParseTag("Album", line);
-            if(!tag.isEmpty())
-            {
-                if(tag.compareTo("Ten") == 0)
-                {
-                    int i = 7;
-                    Log.i("", "");
-                }
-
-                results.add(new Album(tag));
             }
         }
         return results;

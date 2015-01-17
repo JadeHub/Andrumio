@@ -20,13 +20,13 @@ import java.util.List;
 public class ArtistListAdapter extends BaseExpandableListAdapter {
 
     private Context _context;
-    private List<Character> _chars; // header titles
+    private List<String> _chars; // header titles
 
     // child data in format of header title, child title
-    HashMap<Character, List<String>> _letterToArtists;
+    HashMap<String, List<String>> _letterToArtists;
 
-    public ArtistListAdapter(Context context, List<Character> chars,
-                             HashMap<Character, List<String>> letterToArtists) {
+    public ArtistListAdapter(Context context, List<String> chars,
+                             HashMap<String, List<String>> letterToArtists) {
         this._context = context;
         _chars = chars;
         _letterToArtists = letterToArtists;
@@ -45,10 +45,10 @@ public class ArtistListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, final int childPosition,
-                             boolean isLastChild, View convertView, ViewGroup parent) {
+                         boolean isLastChild, View convertView, ViewGroup parent) {
 
         final String childText = (String) getChild(groupPosition, childPosition);
-
+/*
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -65,7 +65,21 @@ public class ArtistListAdapter extends BaseExpandableListAdapter {
         ImageView imgView = (ImageView)convertView.findViewById(R.id.imgView1);
         imgView.setImageResource(R.drawable.album);
 
-        return convertView;
+        return convertView;*/
+
+        View vi = convertView;
+
+        if(convertView==null) {
+
+            LayoutInflater inflater = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            vi = inflater.inflate(R.layout.list_row, null);
+        }
+
+        ((TextView)vi.findViewById(R.id.txtHeadline)).setText(childText);
+        ((TextView)vi.findViewById(R.id.txtSubline)).setText(childText);
+        ((ImageView)vi.findViewById(R.id.list_image)).setImageResource(R.drawable.artist);
+
+        return vi;
     }
 
     @Override
@@ -92,7 +106,7 @@ public class ArtistListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
-        Character headerTitle = (Character) getGroup(groupPosition);
+        String headerTitle = (String) getGroup(groupPosition);
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -102,13 +116,7 @@ public class ArtistListAdapter extends BaseExpandableListAdapter {
         TextView lblListHeader = (TextView) convertView
                 .findViewById(R.id.lblListHeader);
 
-        float f = lblListHeader.getTextSize();
-
-        lblListHeader.setTypeface(null, Typeface.BOLD);
         lblListHeader.setText(headerTitle.toString());
-
-
-
         return convertView;
     }
 

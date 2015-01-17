@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.andrumio.josh.mpd.Client;
 import com.andrumio.josh.mpd.IClient;
+import com.andrumio.josh.mpd.Server;
 
 /**
  * Created by Josh on 14/01/2015.
@@ -12,15 +13,17 @@ import com.andrumio.josh.mpd.IClient;
 public class App extends Application {
 
     private Client _client;
+    private Server _server;
 
     public App()
     {
-        _client = new Client("Living Room", "192.168.0.11", 6600);
+        _server = new Server("192.168.0.11", 6600);
+
     }
 
-    public IClient getClient()
+    public Server getServer()
     {
-        return _client;
+        return _server;
     }
 
     public static App GetApp(Context c)

@@ -31,7 +31,7 @@ import java.util.List;
 public class PlaylistFragment extends Fragment {
 
     private AsyncLoader<List<ITrack>> _loader;
-    private ArrayAdapter<ITrack> _listAdapter;
+    private PlaylistAdapter _listAdapter;
 
     public PlaylistFragment() {
         // Required empty public constructor
@@ -48,7 +48,7 @@ public class PlaylistFragment extends Fragment {
                 new AsyncLoaderLoad() {
                     @Override
                     public List<ITrack> Load() {
-                        return App.GetApp(getActivity()).getClient().getCurrentPlayList();
+                        return App.GetApp(getActivity()).getServer().getClient().getCurrentPlayList();
                     }
                 },
                 new AsyncLoaderCallback<List<ITrack>>() {
@@ -71,7 +71,7 @@ public class PlaylistFragment extends Fragment {
 
     public void onDataLoaded(List<ITrack> data) {
 
-        _listAdapter = new ArrayAdapter<ITrack>(getActivity(), android.R.layout.simple_list_item_activated_1, data);
+        _listAdapter = new PlaylistAdapter(getActivity(), data);
         ((ListView)getView().findViewById(R.id.playlist_listview)).setAdapter(_listAdapter);
     }
 }

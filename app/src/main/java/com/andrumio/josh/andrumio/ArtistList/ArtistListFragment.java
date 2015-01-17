@@ -57,7 +57,7 @@ public class ArtistListFragment extends Fragment implements ExpandableListView.O
                 new AsyncLoaderLoad() {
                     @Override
                     public List<IArtist> Load() {
-                        return App.GetApp(getActivity()).getClient().getArtistList();
+                        return App.GetApp(getActivity()).getServer().getClient().getArtistList();
                     }
                 },
                 new AsyncLoaderCallback<List<IArtist>>() {
@@ -99,34 +99,37 @@ public class ArtistListFragment extends Fragment implements ExpandableListView.O
         getView().findViewById(R.id.artist_listview1).setVisibility(View.VISIBLE);
         getView().findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
-        HashSet<Character> chars = new HashSet<>();
+        HashSet<String> chars = new HashSet<>();
 
-        HashMap<Character, List<String>> letterToArtist = new HashMap<>();
+        HashMap<String, List<String>> letterToArtist = new HashMap<>();
 
         for (IArtist a : data) {
             String name = a.GetName();
-            if (name.length() > 0) {
-                char c = a.GetName().toUpperCase().charAt(0);
-                chars.add(c);
+            if (name.length() > 0)
+            {
+                String key = "Artists: " + a.GetName().toUpperCase().charAt(0);
 
-                if (!letterToArtist.containsKey(c)) {
-                    letterToArtist.put(c, new ArrayList<String>());
+                chars.add(key);
+
+                if (!letterToArtist.containsKey(key)) {
+                    letterToArtist.put(key, new ArrayList<String>());
                 }
-                letterToArtist.get(c).add(a.GetName());
+                letterToArtist.get(key).add(a.GetName());
             }
         }
 
         final ExpandableListView listview = (ExpandableListView) getView().findViewById(R.id.artist_listview1);
 
-        ArrayList<Character> charList = new ArrayList<Character>(chars);
-        Collections.sort(charList, new Comparator<Character>() {
+        ArrayList<String> artistList = new ArrayList<String>(chars);
+
+        Collections.sort(artistList, new Comparator<String>() {
             @Override
-            public int compare(Character c1, Character c2) {
+            public int compare(String c1, String c2) {
                 return c1.compareTo(c2);
             }
         });
 
-        _listAdapter = new ArtistListAdapter(getActivity(), charList, letterToArtist);
+        _listAdapter = new ArtistListAdapter(getActivity(), artistList, letterToArtist);
         listview.setAdapter(_listAdapter);
     }
 

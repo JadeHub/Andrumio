@@ -13,6 +13,7 @@ import com.andrumio.josh.andrumio.ArtistList.ArtistListActivity;
 import com.andrumio.josh.andrumio.Playlist.PlaylistActivity;
 import com.andrumio.josh.mpd.Client;
 import com.andrumio.josh.mpd.IClient;
+import com.andrumio.josh.mpd.Server;
 
 
 public class ServerActivity extends ActionBarActivity {
@@ -30,7 +31,9 @@ public class ServerActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_server);
 
-        _client = App.GetApp(this).getClient();
+        _client = App.GetApp(this).getServer().getClient();
+
+
 
         _btnPlaylist = (Button)findViewById(R.id.btnPlaylist);
         _btnArtistList = (Button)findViewById(R.id.btnArtistList);
@@ -81,7 +84,7 @@ public class ServerActivity extends ActionBarActivity {
                 // Perform action on click
             }
         });
-
+/*
         if(!_client.isConnected())
         {
             _client.connect(new Client.Callback() {
@@ -95,10 +98,7 @@ public class ServerActivity extends ActionBarActivity {
                     enableButtons();
                 }
             });
-        }
-
-
-
+        }*/
         enableButtons();
     }
 
@@ -110,6 +110,11 @@ public class ServerActivity extends ActionBarActivity {
         _btnFileList.setEnabled(enable);
         _btnStatus.setEnabled(enable);
         _btnSettings.setEnabled(enable);
+
+        if(enable)
+        {
+         //   _server.enterIdle();
+        }
     }
 
     @Override

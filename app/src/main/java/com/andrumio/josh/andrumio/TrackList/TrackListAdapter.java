@@ -48,7 +48,7 @@ public class TrackListAdapter extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
-        final ITrack track = (ITrack) getChild(groupPosition, childPosition);
+     /*   final ITrack track = (ITrack) getChild(groupPosition, childPosition);
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -61,7 +61,22 @@ public class TrackListAdapter extends BaseExpandableListAdapter {
 
         txtListChild.setText(track.getTitle());
 
-        return convertView;
+        return convertView;*/
+
+        final ITrack track = (ITrack) getChild(groupPosition, childPosition);
+        View vi = convertView;
+
+        if(convertView==null) {
+
+            LayoutInflater inflater = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            vi = inflater.inflate(R.layout.list_row, null);
+        }
+
+        ((TextView)vi.findViewById(R.id.txtHeadline)).setText(track.getTitle());
+        ((TextView)vi.findViewById(R.id.txtSubline)).setText(track.getAlbumName());
+        ((ImageView)vi.findViewById(R.id.list_image)).setImageResource(R.drawable.track3);
+
+        return vi;
     }
 
     @Override

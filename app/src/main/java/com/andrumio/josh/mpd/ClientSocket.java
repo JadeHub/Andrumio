@@ -46,6 +46,36 @@ public class ClientSocket {
         action.execute();
     }
 
+    public boolean blockingConnect(String host, int port)
+    {
+        _socketReader = null;
+        _socketWriter = null;
+
+        try
+        {
+            _socketReader = null;
+            _socketWriter = null;
+
+            InetAddress address = InetAddress.getByName(host);
+            _socket.connect(new InetSocketAddress(address, port));
+            _socketReader = new BufferedReader(new InputStreamReader(_socket.getInputStream()));
+            _socketWriter = new PrintWriter(_socket.getOutputStream(), true);
+            String ver = Recv();
+
+            if(ver.startsWith("OK MPD"))
+                return true;
+        }
+        catch(UnknownHostException e)
+        {
+            //_errorMsg = e.getMessage();
+        }
+        catch (IOException e)
+        {
+           // _errorMsg = e.getMessage();
+        }
+        return false;
+    }
+
     public void disconnect()
     {
         try {

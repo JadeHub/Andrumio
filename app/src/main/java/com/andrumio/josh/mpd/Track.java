@@ -7,11 +7,6 @@ import java.util.HashMap;
  */
 public class Track implements ITrack {
 
-    private final static String FILE_TAG = "file";
-    private final static String ALBUM_TAG = "Album";
-    private final static String ARTIST_TAG = "Artist";
-    private final static String TITLE_TAG = "Title";
-
     private final String _file;
 
     private final HashMap<String, String> _tags;
@@ -20,9 +15,9 @@ public class Track implements ITrack {
     {
         _tags = new HashMap<>(tags);
 
-        if(hasTag(FILE_TAG))
+        if(hasTag(TagNames.FILE))
         {
-            _file = getTag(FILE_TAG);
+            _file = getTag(TagNames.FILE);
         }
         else
         {
@@ -34,10 +29,10 @@ public class Track implements ITrack {
     public String getFileName() {return _file;}
 
     @Override
-    public String getAlbumName() {return getTag(ALBUM_TAG);}
+    public String getAlbumName() {return getTag(TagNames.ALBUM);}
 
     @Override
-    public String getTitle() {return getTag(TITLE_TAG);}
+    public String getTitle() {return getTag(TagNames.TITLE);}
 
     @Override
     public String toString() {
