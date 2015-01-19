@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -49,7 +50,7 @@ public class ArtistListFragment extends Fragment implements ExpandableListView.O
 
         setHasOptionsMenu(true);
 
-        ExpandableListView listView = ((ExpandableListView) v.findViewById(R.id.artist_listview1));
+        ExpandableListView listView = ((ExpandableListView) v.findViewById(R.id.artist_listview));
         listView.setVisibility(View.GONE);
         listView.setOnChildClickListener(this);
 
@@ -57,7 +58,7 @@ public class ArtistListFragment extends Fragment implements ExpandableListView.O
                 new AsyncLoaderLoad() {
                     @Override
                     public List<IArtist> Load() {
-                        return App.GetApp(getActivity()).getServer().getClient().getArtistList();
+                        return App.GetApp(getActivity()).getServer().getQueryClient().getArtistList();
                     }
                 },
                 new AsyncLoaderCallback<List<IArtist>>() {
@@ -96,7 +97,7 @@ public class ArtistListFragment extends Fragment implements ExpandableListView.O
 
     public void onDataLoaded(List<IArtist> data) {
 
-        getView().findViewById(R.id.artist_listview1).setVisibility(View.VISIBLE);
+        getView().findViewById(R.id.artist_listview).setVisibility(View.VISIBLE);
         getView().findViewById(R.id.loadingPanel).setVisibility(View.GONE);
 
         HashSet<String> chars = new HashSet<>();
@@ -118,7 +119,7 @@ public class ArtistListFragment extends Fragment implements ExpandableListView.O
             }
         }
 
-        final ExpandableListView listview = (ExpandableListView) getView().findViewById(R.id.artist_listview1);
+        final ExpandableListView listview = (ExpandableListView) getView().findViewById(R.id.artist_listview);
 
         ArrayList<String> artistList = new ArrayList<String>(chars);
 
@@ -137,6 +138,7 @@ public class ArtistListFragment extends Fragment implements ExpandableListView.O
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         // Inflate the menu; this adds items to the action bar if it is present.
       //  inflater.inflate(R.menu.menu_artist_list, menu);
+
     }
 
     @Override

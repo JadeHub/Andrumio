@@ -2,8 +2,10 @@ package com.andrumio.josh.mpd;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 /**
@@ -29,7 +31,8 @@ public class Client implements IClient, ClientSocket.Callback {
     @Override
     public void connect(Callback c) {
         _callback = c;
-        _socket.beginConnect(_host, _port);
+        ConnectAction action = new ConnectAction(_host, _port);
+        action.execute();
     }
 
     @Override
@@ -170,12 +173,12 @@ public class Client implements IClient, ClientSocket.Callback {
     }
 
     @Override
-    public TagSet getStatus()
+    public Status getStatus()
     {
         if(!_socket.isConnected())
             _socket.blockingConnect(_host, _port);
         _socket.Send("status");
-        return recvTagSet();
+        return new Status(recvTagSet());
     }
 
     @Override
@@ -205,7 +208,7 @@ public class Client implements IClient, ClientSocket.Callback {
     public List<String> idle() {
         _socket.Send("idle");
 
-        List<String> result = new ArrayList<>();
+        HashSet<String> result = new HashSet<>();
 
         while(true) {
             String line = _socket.Recv();
@@ -214,9 +217,8 @@ public class Client implements IClient, ClientSocket.Callback {
             if(isTag(line, TagNames.CHANGED))
                 result.add(parseTag(line, TagNames.CHANGED));
         }
-        return result;
+        return new ArrayList<String>(result);
     }
-
 
     @Override
     public List<IArtist> getArtistList()
@@ -241,30 +243,28 @@ public class Client implements IClient, ClientSocket.Callback {
         return results;
     }
 
+    @Override
+    public boolean removeFromPlaylist(int id)
+    {
+        if(!_socket.isConnected())
+            _socket.blockingConnect(_host, _port);
+        _socket.Send("delete id " + id);
+
+        try {
+
+            String line = _socket.Recv();
+            return !IsErrorResult(line);
+        }
+        catch(Exception e)
+        {
+            Log.e("", e.getMessage());
+        }
+        return false;
+    }
+
     /*********************************************************
      ClientSocket.Callback
     *********************************************************/
-
-    @Override
-    public void onConnected()
-    {
-        Log.i("Socket", "Connected");
-        _callback.onConnected();
-    }
-
-    @Override
-    public void onConnectFailed(String msg)
-    {
-        Log.e("Socket", "Connect failed: " + msg);
-        _callback.onConnectionError(msg);
-    }
-
-    @Override
-    public void onDisconnected()
-    {
-        Log.i("Socket", "Disconnected");
-        _callback.onDisconnected();
-    }
 
     @Override
     public void onReadError(String msg)
@@ -272,5 +272,37 @@ public class Client implements IClient, ClientSocket.Callback {
         Log.i("Socket", "Read error: " + msg);
         _callback.onConnectionError(msg);
         _socket.disconnect();
+    }
+
+
+    /**************************************/
+    /* Connect action
+    /**************************************/
+    public class ConnectAction extends AsyncTask<Void, Void, Boolean>
+    {
+        private String _errorMsg;
+        private final String _host;
+        private final int _port;
+
+        public ConnectAction(String host, int port)
+        {
+            _host = host;
+            _port = port;
+        }
+
+        @Override
+        public Boolean doInBackground(Void...v)
+        {
+            return _socket.blockingConnect(_host, _port);
+        }
+
+        @Override
+        public void onPostExecute(Boolean result)
+        {
+            if(result)
+                _callback.onConnected();
+            else
+                _callback.onConnectionError(_errorMsg);
+        }
     }
 }

@@ -11,14 +11,12 @@ import android.widget.Button;
 
 import com.andrumio.josh.andrumio.ArtistList.ArtistListActivity;
 import com.andrumio.josh.andrumio.Playlist.PlaylistActivity;
-import com.andrumio.josh.mpd.Client;
-import com.andrumio.josh.mpd.IClient;
-import com.andrumio.josh.mpd.Server;
+import com.andrumio.josh.mpd.Server.Server;
 
 
-public class ServerActivity extends ActionBarActivity {
+public class ServerActivity extends ActionBarActivity implements Server.ConnectionListener {
 
-    private IClient _client;
+    private Server _server;
 
     private Button _btnPlaylist;
     private Button _btnArtistList;
@@ -31,9 +29,7 @@ public class ServerActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_server);
 
-        _client = App.GetApp(this).getServer().getClient();
-
-
+        _server = App.GetApp(this).getServer();
 
         _btnPlaylist = (Button)findViewById(R.id.btnPlaylist);
         _btnArtistList = (Button)findViewById(R.id.btnArtistList);
@@ -84,27 +80,21 @@ public class ServerActivity extends ActionBarActivity {
                 // Perform action on click
             }
         });
-/*
-        if(!_client.isConnected())
-        {
-            _client.connect(new Client.Callback() {
-                @Override
-                public void onConnected() {
-                    enableButtons();
-                }
 
-                @Override
-                public void onDisconnected() {
-                    enableButtons();
-                }
-            });
-        }*/
+
+        _server.addConnectionListener(this);
         enableButtons();
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        _server.removeConnectionListener(this);
     }
 
     private void enableButtons()
     {
-        boolean enable = _client.isConnected();
+        boolean enable = _server.isConnected();
         _btnPlaylist.setEnabled(enable);
         _btnArtistList.setEnabled(enable);
         _btnFileList.setEnabled(enable);
@@ -137,5 +127,20 @@ public class ServerActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onConnected() {
+        enableButtons();
+    }
+
+    @Override
+    public void onDisconnected() {
+        enableButtons();
+    }
+
+    @Override
+    public void onConnectionError(String error) {
+        enableButtons();
     }
 }

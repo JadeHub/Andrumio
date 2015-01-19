@@ -4,8 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.andrumio.josh.mpd.Client;
-import com.andrumio.josh.mpd.IClient;
-import com.andrumio.josh.mpd.Server;
+import com.andrumio.josh.mpd.Server.Server;
 
 /**
  * Created by Josh on 14/01/2015.

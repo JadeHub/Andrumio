@@ -11,4 +11,6 @@ public interface ITrack {
 
     boolean hasTag(String tag);
     String getTag(String tag);
+
+    int getId();
 }

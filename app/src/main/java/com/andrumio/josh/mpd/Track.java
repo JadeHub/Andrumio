@@ -1,5 +1,7 @@
 package com.andrumio.josh.mpd;
 
+import android.nfc.Tag;
+
 import java.util.HashMap;
 
 /**
@@ -38,6 +40,16 @@ public class Track implements ITrack {
     public String toString() {
 
         return getTitle();
+    }
+
+    @Override
+    public int getId()
+    {
+        if(hasTag(TagNames.ID))
+        {
+            return Integer.parseInt(getTag(TagNames.ID));
+        }
+        return -1;
     }
 
     @Override

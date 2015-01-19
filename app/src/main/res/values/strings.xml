@@ -17,5 +17,7 @@
     <string name="strCity">City</string>
     <string name="strWeather">Weather</string>
     <string name="placeholder">Placeholder</string>
+    <string name="remove">Remove</string>
+    <string name="play_now">Play Now</string>
 
 </resources>

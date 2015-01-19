@@ -23,16 +23,16 @@ public interface IClient {
     int getPort();
 
     List<IArtist> getArtistList();
-
     List<ITrack> getArtistTrackList(String artist);
-
     List<ITrack> getCurrentPlayList();
 
-    TagSet getStatus();
+    Status getStatus();
 
     List<String> idle();
 
     void endIdle();
+
+    boolean removeFromPlaylist(int id);
 }
 
 

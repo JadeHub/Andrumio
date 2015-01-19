@@ -9,4 +9,6 @@ public class TagNames {
     public final static String ARTIST = "Artist";
     public final static String TITLE = "Title";
     public final static String CHANGED = "changed";
+    public final static String PLAYLIST_ID = "playlist";
+    public final static String ID = "Id";
 }
